@@ -3,6 +3,7 @@
   <head>
     <title>Scout Run</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://scoutrun.codio.dev/images/player-left-foot-forward-1.png">
     <style>
       html, body {
         width: 100%;
@@ -141,9 +142,9 @@
 
       const fps = 30;
 
-      const minimumGapBetweenObstaclesInUnits = 5;
+      const minimumGapBetweenObstaclesInUnits = 6;
 
-      const obstacleGenerationProbabilityPerSecond = 0.6;
+      const obstacleGenerationProbabilityPerSecond = 0.7;
 
       const objectCollisionOverlapInUnits = 0.4;
 
@@ -473,7 +474,6 @@ function handleTouchMove(evt) {
         const setGameReady = function(){
           currentPlayerImg = '';
           gameVars = new GameVars();
-          console.log('game vars created: '+JSON.stringify(gameVars));
           resizeAll();
           document.getElementById('loading-icon').style.display = 'none';
           document.getElementById('start-game').style.display = 'inline';
