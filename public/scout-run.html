@@ -381,53 +381,43 @@
           },
           touchListener: function(event){
             if(event.type == 'touchstart'){
-              console.log('touchstart');
               this.firstTouch = event.touches[0];
-              console.log('firstTouch: '+JSON.stringify(this.firstTouch));
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
-              console.log('xDown: '+this.xDown);
-              console.log('yDown: '+this.yDown);
             }
             else if(event.type == 'touchmove'){
-              console.log('touchmove');
               if ( ! this.xDown || ! this.yDown ) {
-                console.log('return');
                 return;
               }
 
               let xUp = event.touches[0].clientX;
               let yUp = event.touches[0].clientY;
-              console.log('xUp: '+xUp);
-              console.log('yUp: '+yUp);
 
               let xDiff = this.xDown - xUp;
               let yDiff = this.yDown - yUp;
 
-              console.log('xDiff: '+xDiff);
-              console.log('yDiff: '+yDiff);
               if ( xDiff > yDiff ) {/*most significant*/
-                console.log('swipe horizontal');
                   if ( xDiff > 0 ) {
                       /* left swipe */
-                      console.log('left swipe');
                   } else {
                       /* right swipe */
-                      console.log('right swipe');
                   }
               } else {
-                console.log('swipe vertical');
                   if ( yDiff > 0 ) {
                       /* up swipe */
-                      console.log('up swipe');
+                      controller.jump = true;
                   } else {
                       /* down swipe */
-                      console.log('down swipe');
+                      controller.slide = true;
                   }
               }
               /* reset values */
               this.xDown = null;
               this.yDown = null;
+            }
+            else if(event.type == 'touchend'){
+              controller.jump = false;
+              controller.slide = false;
             }
           }
         }
