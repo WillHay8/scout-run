@@ -385,8 +385,8 @@
             if(event.type == 'touchstart'){
               console.log('touchstart');
               this.firstTouch = event.touches || event.originalEvent.touches;
-              this.xDown = firstTouch.clientX;
-              this.yDown = firstTouch.clientY;
+              this.xDown = this.firstTouch.clientX;
+              this.yDown = this.firstTouch.clientY;
             }
             else if(event.type == 'touchmove'){
               console.log('touchmove');
