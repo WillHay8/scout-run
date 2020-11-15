@@ -10,6 +10,29 @@
         height: 100%;
         margin: 0;
         font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        font-size: 20px;
+        line-height: 27px;
+      }
+      h1 {
+        font-size: 50px;
+      }
+      h2 {
+        font-size: 35px;
+      }
+      h3 {
+        font-size: 25px;
+      }
+      button {
+        font-size: 21px;
+        font-weight: bold;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 10px;
+      }
+      li {
+        margin-top: 8px;
       }
 
       img {
@@ -21,23 +44,31 @@
         width: 100%;
         height: 100%;
         background-color: white;
+        text-align: center;
       }
-      #pre-game-con, #loading-icon, #start-game, #play-again{
-        width: 170px;
+      #loading-icon, #start-game, #play-again{
+        width: 300px;
         height: 50px;
       }
       #loading-icon, #start-game, #play-again{
+        left: 0;
+        right: 0;
         position: absolute;
         border: none;
-        padding: none;
-        margin: none;
+        padding: 0;
+        margin: 0;
         border-radius: 5px;
       }
       #pre-game-con {
         position: relative;
         margin: auto;
-        top: 50%;
-        margin-top: -25px;
+        margin-top: 100px;
+        width: 400px;
+        max-width: 100%;
+        height: 430px;
+        padding: 30px;
+        background-color: #fdfdfd;
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
       }
       #loading-icon {
         color: black;
@@ -47,11 +78,12 @@
       }
       #start-game, #play-again {
         background-color: #33ee33;
-        cursor: pointer;
       }
       #start-game {
         position: absolute;
         display: none;
+        margin: auto;
+        margin-top: 25px;
       }
       #post-game-background {
         display: none;
@@ -79,6 +111,18 @@
         margin: auto;
         margin-top: 30px;
       }
+      .blurb {
+        margin-top: 30px;
+      }
+      .controls {
+        margin-top: 40px;
+      }
+
+      button:hover {
+        cursor: pointer;
+        background-color: black;
+        color: white;
+      }
 
     </style>
   </head>
@@ -102,8 +146,15 @@
 
     <div id="pre-game-background">
       <div id="pre-game-con">
+        <h1>Scout Run</h1>
+        <p class="blurb">As you run along, jump over the camp fires and slide through the tents to stay alive at camp</p>
+        <h3 class="controls">Controls:</h3>
+        <ul>
+          <li>Press Up to Jump</li>
+          <li>Press Down to Slide</li>
+        </ul>
         <div id="loading-icon">Loading Game...</div>
-        <button id="start-game">Play Scout Run</button>
+        <button id="start-game">PLAY</button>
       </div>
     </div>
 
@@ -111,7 +162,7 @@
       <div id="post-game-con">
         <div id="game-over">GAME OVER</div>
         <div id="score-con"><span>Distance Run: </span><span id="score"></span><span>m</span></div>
-        <button id="play-again">Play Again</div>
+        <button id="play-again">PLAY AGAIN</div>
       </div>
     </div>
 
@@ -476,7 +527,7 @@ function handleTouchMove(evt) {
           gameVars = new GameVars();
           resizeAll();
           document.getElementById('loading-icon').style.display = 'none';
-          document.getElementById('start-game').style.display = 'inline';
+          document.getElementById('start-game').style.display = 'block';
           document.getElementById('start-game').addEventListener('click', startGame);
           document.getElementById('play-again').addEventListener('click', restartGame);
         }
@@ -723,6 +774,7 @@ function handleTouchMove(evt) {
           });
 
           // draw score
+          context.fillStyle = "#854900";
           context.font = '30px "Lucida Sans Unicode", "Lucida Grande", sans-serif';
           context.fillText("Distance Run: "+gameVars.score.value+"m", gameVars.score.x, gameVars.score.y);
 
