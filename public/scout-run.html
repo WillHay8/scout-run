@@ -533,22 +533,21 @@
           document.getElementById('play-again').addEventListener('click', restartGame);
         }
 
-        const increaseImageLoadedCount = function(index){
-          imagesLoadedCount++;
-          if(imagesLoadedCount == totalImages){
+        const checkImagesLoadedCount = function(index){
+          if(backgroundImg.complete && playerJumpImg.complete && playerSlideImg.complete && playerRun1Img.complete && playerRun2Img.complete && playerRun3Img.complete && jumpObstacleImg.complete && jumpObstacleImg.complete && slideObstacleImg.complete){
             setGameReady();
           }
         }
 
         const setImageLoadEventListeners = function(){
-          backgroundImg.addEventListener('load', increaseImageLoadedCount, false);
-          playerJumpImg.addEventListener('load', increaseImageLoadedCount, false);
-          playerSlideImg.addEventListener('load', increaseImageLoadedCount, false);
-          playerRun1Img.addEventListener('load', increaseImageLoadedCount, false);
-          playerRun2Img.addEventListener('load', increaseImageLoadedCount, false);
-          playerRun3Img.addEventListener('load', increaseImageLoadedCount, false);
-          jumpObstacleImg.addEventListener('load', increaseImageLoadedCount, false);
-          slideObstacleImg.addEventListener('load', increaseImageLoadedCount, false);
+          backgroundImg.addEventListener('load', checkImagesLoadedCount, false);
+          playerJumpImg.addEventListener('load', checkImagesLoadedCount, false);
+          playerSlideImg.addEventListener('load', checkImagesLoadedCount, false);
+          playerRun1Img.addEventListener('load', checkImagesLoadedCount, false);
+          playerRun2Img.addEventListener('load', checkImagesLoadedCount, false);
+          playerRun3Img.addEventListener('load', checkImagesLoadedCount, false);
+          jumpObstacleImg.addEventListener('load', checkImagesLoadedCount, false);
+          slideObstacleImg.addEventListener('load', checkImagesLoadedCount, false);
         };
 
         setImageLoadEventListeners();
