@@ -15,6 +15,7 @@
         font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
         font-size: 20px;
         line-height: 27px;
+        overscroll-behavior-y: contain;
       }
       h1 {
         font-size: 50px;
@@ -793,6 +794,7 @@
         window.addEventListener('keyup', controller.keyListener);
         document.addEventListener('touchstart', controller.touchListener, false);
         document.addEventListener('touchmove', controller.touchListener, false);
+        document.addEventListener('touchend', controller.touchListener, false);
 
       }
 
