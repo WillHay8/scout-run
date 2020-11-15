@@ -385,12 +385,13 @@
               this.firstTouch = event.touches || event.originalEvent.touches;
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
-              console.log('xDowm: '+this.xDown);
-              console.log('yDowm: '+this.yDown);
+              console.log('xDown: '+this.xDown);
+              console.log('yDown: '+this.yDown);
             }
             else if(event.type == 'touchmove'){
               console.log('touchmove');
               if ( ! this.xDown || ! this.yDown ) {
+                console.log('return');
                 return;
               }
 
