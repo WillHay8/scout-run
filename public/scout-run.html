@@ -160,9 +160,9 @@
         <h1>Scout Run</h1>
         <p class="blurb">As you run through the campsite, jump over the camp fires and slide through the tents to stay alive</p>
         <h3 class="controls">Controls:</h3>
-        <ul>
-          <li>Press Up to Jump</li>
-          <li>Press Down to Slide</li>
+        <ul id="instructions">
+          <li>Press Up Arrow to Jump</li>
+          <li>Press Down Arrow to Slide</li>
         </ul>
         <div id="loading-icon">Loading Game...</div>
         <button id="start-game">PLAY</button>
@@ -215,6 +215,9 @@
       const levelTime = 15000; //milliseconds
 
       const levelUpTime = 1500; // milliseconds
+
+      const keyboardDeviceInstructions = "<li>Press Up Arrow to Jump</li><li>Press Down Arrow to Slide</li>";
+      const touchDeviceInstructions = "<li>Swipe Up to Jump</li><li>Swipe Down to Slide</li>";
 
       //This object defines the size of the images relative to each other.
       const gameSizes = {
@@ -296,6 +299,24 @@
 
         /*
 
+        Change instructions depending on device
+
+        */
+        const isTouchDevice = function() {
+          try {
+            document.createEvent("TouchEvent");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+
+        if(isTouchDevice()){
+          document.getElementById('instructions').innerHTML = touchDeviceInstructions;
+        }
+
+        /*
+
         CREATE IMAGE ELEMENT CONSTANTS
 
         */
@@ -323,17 +344,19 @@
 
         const context = document.querySelector("canvas").getContext("2d");
 
-        const player = {
-          height: 1,
-          width: 1,
-          jumping: false,
-          sliding: false,
-          x: 1,
-          y: 1,
-          yVelocity: 0,
-          runPosition: 1,
-          runNextPosition: 2
+        function Player(){
+          this.height = 1,
+          this.width = 1,
+          this.jumping = false,
+          this.sliding = false,
+          this.x = 1,
+          this.y = 1,
+          this.yVelocity = 0,
+          this.runPosition = 1,
+          this.runNextPosition = 2
         }
+        let player = new Player();
+
 
         const backgroundSize = {
           imageAspectRatio: 1,
@@ -382,13 +405,11 @@
           },
           touchListener: function(event){
             if(event.type == 'touchstart'){
-              console.log('touchstart');
               this.firstTouch = event.touches[0];
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
             }
             else if(event.type == 'touchmove'){
-              console.log('touchmove');
               if ( ! this.xDown || ! this.yDown ) {
                 return;
               }
@@ -398,24 +419,19 @@
 
               let xDiff = this.xDown - xUp;
               let yDiff = this.yDown - yUp;
-              console.log('xDiff: '+ Math.abs(xDiff));
-              console.log('yDiff: '+Math.abs(yDiff));
 
               if ( Math.abs(xDiff) > Math.abs(yDiff) ) {/*most significant*/
-                console.log('horizontal swipe');
                   if ( xDiff > 0 ) {
                       /* left swipe */
                   } else {
                       /* right swipe */
                   }
               } else {
-                  console.log('vertical swipe');
                   if ( yDiff > 0 ) {
                       /* up swipe */
                       controller.jump = true;
                   } else {
                       /* down swipe */
-                      console.log('swipe down');
                       controller.slide = true;
                   }
               }
@@ -533,7 +549,7 @@
         }
 
         const setGameReady = function(){
-          currentPlayerImg = '';
+          currentPlayerImg = playerRun1Img;
           gameVars = new GameVars();
           resizeAll();
           document.getElementById('loading-icon').style.display = 'none';
@@ -575,6 +591,9 @@
 
         const restartGame = function(){
           gameVars = new GameVars();
+          player = new Player();
+          currentPlayerImg = playerRun1Img;
+          resizeAll();
           startGame();
         }
 
