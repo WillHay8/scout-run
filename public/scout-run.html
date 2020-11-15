@@ -383,6 +383,7 @@
             if(event.type == 'touchstart'){
               console.log('touchstart');
               this.firstTouch = event.touches || event.originalEvent.touches;
+              console.log('firstTouch: '+JSON.stringify(this.firstTouch));
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
               console.log('xDown: '+this.xDown);
