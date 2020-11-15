@@ -381,12 +381,15 @@
             }
           },
           touchListener: function(event){
+            console.log('touch listener');
             if(event.type == 'touchstart'){
+              console.log('touchstart');
               this.firstTouch = event.touches || event.originalEvent.touches;
               this.xDown = firstTouch.clientX;
               this.yDown = firstTouch.clientY;
             }
             else if(event.type == 'touchmove'){
+              console.log('touchmove');
               if ( ! this.xDown || ! this.yDown ) {
                 return;
               }
@@ -469,7 +472,6 @@
         const resizeCanvas = function(){
           let html = document.querySelector('html');
           context.canvas.width = html.clientWidth;
-          console.log('canvas width: '+context.canvas.width);
           context.canvas.height = html.clientHeight;
         }
 
@@ -789,8 +791,8 @@
 
         window.addEventListener('keydown', controller.keyListener);
         window.addEventListener('keyup', controller.keyListener);
-        window.addEventListener('touchstart', controller.touchListener, false);
-        window.addEventListener('touchmove', controller.touchListener, false);
+        document.addEventListener('touchstart', controller.touchListener, false);
+        document.addEventListener('touchmove', controller.touchListener, false);
 
       }
 
