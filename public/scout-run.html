@@ -382,7 +382,7 @@
           },
           touchListener: function(event){
             if(event.type == 'touchstart'){
-              this.firstTouch = evt.touches || evt.originalEvent.touches;
+              this.firstTouch = event.touches || event.originalEvent.touches;
               this.xDown = firstTouch.clientX;
               this.yDown = firstTouch.clientY;
             }
