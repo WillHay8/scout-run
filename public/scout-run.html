@@ -382,11 +382,13 @@
           },
           touchListener: function(event){
             if(event.type == 'touchstart'){
+              console.log('touchstart');
               this.firstTouch = event.touches[0];
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
             }
             else if(event.type == 'touchmove'){
+              console.log('touchmove');
               if ( ! this.xDown || ! this.yDown ) {
                 return;
               }
@@ -396,6 +398,8 @@
 
               let xDiff = this.xDown - xUp;
               let yDiff = this.yDown - yUp;
+              console.log('xDiff: '+xDiff);
+              console.log('yDiff: '+yDiff);
 
               if ( xDiff > yDiff ) {/*most significant*/
                   if ( xDiff > 0 ) {
