@@ -398,10 +398,11 @@
 
               let xDiff = this.xDown - xUp;
               let yDiff = this.yDown - yUp;
-              console.log('xDiff: '+xDiff);
-              console.log('yDiff: '+yDiff);
+              console.log('xDiff: '+ Math.abs(xDiff));
+              console.log('yDiff: '+Math.abs(yDiff));
 
-              if ( xDiff > yDiff ) {/*most significant*/
+              if ( Math.abs(xDiff) > Math.abs(yDiff) ) {/*most significant*/
+                console.log('horizontal swipe');
                   if ( xDiff > 0 ) {
                       /* left swipe */
                   } else {
