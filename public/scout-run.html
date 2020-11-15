@@ -404,11 +404,13 @@
                       /* right swipe */
                   }
               } else {
+                  console.log('vertical swipe');
                   if ( yDiff > 0 ) {
                       /* up swipe */
                       controller.jump = true;
                   } else {
                       /* down swipe */
+                      console.log('swipe down');
                       controller.slide = true;
                   }
               }
