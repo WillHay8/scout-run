@@ -382,7 +382,7 @@
           touchListener: function(event){
             if(event.type == 'touchstart'){
               console.log('touchstart');
-              this.firstTouch = event.touches || event.originalEvent.touches;
+              this.firstTouch = event.touches[0];
               console.log('firstTouch: '+JSON.stringify(this.firstTouch));
               this.xDown = this.firstTouch.clientX;
               this.yDown = this.firstTouch.clientY;
