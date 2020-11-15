@@ -555,7 +555,6 @@
         };
 
         setImageLoadEventListeners();
-        checkImagesLoadedCount();
 
 
 
@@ -797,6 +796,8 @@
         document.addEventListener('touchstart', controller.touchListener, {passive: false});
         document.addEventListener('touchmove', controller.touchListener, {passive: false});
         document.addEventListener('touchend', controller.touchListener, {passive: false});
+
+        checkImagesLoadedCount();
 
       }
 
