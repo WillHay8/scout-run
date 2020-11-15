@@ -6,8 +6,11 @@
     <link rel="shortcut icon" href="https://scoutrun.codio.dev/images/player-left-foot-forward-1.png">
     <style>
       html, body {
+        position: relative;
         width: 100%;
         height: 100%;
+        left: 0;
+        top: 0;
         margin: 0;
         font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
         font-size: 20px;
@@ -54,10 +57,12 @@
         left: 0;
         right: 0;
         position: absolute;
+        display: block;
         border: none;
         padding: 0;
-        margin: 0;
         border-radius: 5px;
+        margin: auto;
+        margin-top: 25px;
       }
       #pre-game-con {
         position: relative;
@@ -80,10 +85,7 @@
         background-color: #33ee33;
       }
       #start-game {
-        position: absolute;
         display: none;
-        margin: auto;
-        margin-top: 25px;
       }
       #post-game-background {
         display: none;
@@ -230,7 +232,7 @@
         groundHeight: 2,
         gameHeight: 20,
         getBackgroundHeight: function(){ return this.gameHeight - this.groundHeight },
-        playerHorizontalPosition: 7
+        playerHorizontalPosition: 0.25
       }
 
       const stepSequence = [1,2,3,2];
@@ -371,7 +373,7 @@
           },
           touchListener: function(event){
             if(event.type == 'touchstart'){
-              this.firstTouch = getTouches(evt)[0];
+              this.firstTouch = getTouches(event)[0];
               this.xDown = firstTouch.clientX;
               this.yDown = firstTouch.clientY;
             }
@@ -470,6 +472,7 @@ function handleTouchMove(evt) {
 
         const resizeCanvas = function(){
           context.canvas.width = window.innerWidth;
+          console.log('canvas width: '+context.canvas.width);
           context.canvas.height = window.innerHeight;
         }
 
@@ -491,7 +494,7 @@ function handleTouchMove(evt) {
           else{
             player.height = gameSizes.playerRun.height * getUnit();
             player.width = gameSizes.playerRun.width * getUnit();
-            player.x = gameSizes.playerHorizontalPosition * getUnit();
+            player.x = gameSizes.playerHorizontalPosition * context.canvas.width;
             player.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.playerRun.height) * getUnit();
           }
         }
