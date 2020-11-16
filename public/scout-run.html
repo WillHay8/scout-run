@@ -369,13 +369,15 @@
         }
 
         const background1 = {
-          x: 0,
-          primary: true
+          x: 0
         }
 
         const background2 = {
-          x: 0,
-          primary: false
+          x: 0
+        }
+
+        const background3 = {
+          x: 0
         }
 
         const controller = {
@@ -526,14 +528,33 @@
           }
         }
 
+        const resizeObstacles = function(){
+          gameVars.obstacles.forEach(function(obstacle, item){
+            if(obstacle.obstacleType = 'jump'){
+              obstacle.x = context.canvas.width;
+              obstacle.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.jumpObstacle.height) * getUnit();
+              obstacle.width = gameSizes.jumpObstacle.width * getUnit();
+              obstacle.height = gameSizes.jumpObstacle.height * getUnit();
+            }
+            else if(obstacle.obstacleType = 'slide'){
+              obstacle.x = context.canvas.width;
+              obstacle.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.slideObstacle.height) * getUnit();
+              obstacle.width = gameSizes.slideObstacle.width * getUnit();
+              obstacle.height = gameSizes.slideObstacle.height * getUnit();
+            }
+          });
+        }
+
         var windowResized = false;
         window.onresize = function(){
           windowResized = true;
         }
+
         const resizeAll = function(){
           resizeCanvas();
           resizeBackground();
           resizePlayer();
+          resizeObstacles();
           windowResized = false;
         }
 
@@ -545,12 +566,26 @@
         PREPARE GAME STATE
 
         */
-
         const startGame = function(){
           document.getElementById('pre-game-background').style.display = 'none';
           document.getElementById('post-game-background').style.display = 'none';
           window.requestAnimationFrame(loop);
         }
+
+        const startOnEnterKeypress = function(event){
+          if(event.keyCode == 13){
+            startGame();
+          }
+          window.removeEventListener('keydown', startOnEnterKeypress);
+        }
+
+        const restartOnEnterKeypress = function(event){
+          if(event.keyCode == 13){
+            restartGame();
+          }
+          window.removeEventListener('keydown', restartOnEnterKeypress);
+        }
+
 
         const setGameReady = function(){
           currentPlayerImg = playerRun1Img;
@@ -560,6 +595,7 @@
           document.getElementById('start-game').style.display = 'block';
           document.getElementById('start-game').addEventListener('click', startGame);
           document.getElementById('play-again').addEventListener('click', restartGame);
+          window.addEventListener('keydown', startOnEnterKeypress);
         }
 
         const checkImagesLoadedCount = function(index){
@@ -589,6 +625,7 @@
 
         */
         const executeGameOver = function(){
+          document.addEventListener('keydown', restartOnEnterKeypress);
           document.getElementById('post-game-background').style.display = 'block';
           document.getElementById('score').innerHTML = gameVars.score.value;
         }
@@ -615,6 +652,7 @@
             gameVars.startTime = timeStamp - 1;
           }
           gameVars.runTime = timeStamp - gameVars.startTime;
+
           if(Math.floor(gameVars.runTime/(1000/fps)) > gameVars.frameCount){
             gameVars.frameCount++;
 
@@ -692,6 +730,7 @@
             let primaryBackgroundNumber = Math.floor(gameVars.runDistance / backgroundSize.width);
             background1.x = -gameVars.runDistance + backgroundSize.width * primaryBackgroundNumber;
             background2.x = background1.x + backgroundSize.width;
+            background3.x = background1.x + 2 * backgroundSize.width;
 
             //place obstacles
             if(gameVars.runTime > initialDelayBeforeObstacles){
@@ -783,6 +822,7 @@
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
+          context.drawImage(backgroundImg, background3.x, 0, backgroundSize.width, backgroundSize.height);
 
 
           //drawPlayer
