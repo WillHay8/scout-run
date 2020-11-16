@@ -220,6 +220,12 @@
 
       const levelUpTime = 1500; // milliseconds
 
+      const playerSkinColors = [
+        {r: 255, g: 215, b: 183},
+        {r: 151, g: 96, b: 52},
+        {r: 76, g: 46, b: 21}
+      ];
+
       const keyboardDeviceInstructions = "<li>Press Up Arrow to Jump</li><li>Press Down Arrow to Slide</li>";
       const touchDeviceInstructions = "<li>Swipe Up to Jump</li><li>Swipe Down to Slide</li>";
 
@@ -491,7 +497,8 @@
             x: 0,
             y: 40
           },
-          this.obstacles = []
+          this.obstacles = [],
+          this.playerSkinColor = playerSkinColors[Math.floor(Math.random()*3)];
         }
 
         /*
@@ -822,14 +829,37 @@
         */
 
         const redraw = function(){
+
+          //drawPlayer
+          context.drawImage(currentPlayerImg, player.x, player.y, player.width, player.height);
+
+          //set player skin playerSkinColor
+          // pull the entire image into an array of pixel data
+          var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+
+          // examine every pixel,
+          // change any old rgb to the new-rgb
+          for (var i=0;i<imageData.data.length;i+=4)
+            {
+                // is this pixel the old rgb?
+                if(imageData.data[i]==playerSkinColors[0].r &&
+                   imageData.data[i+1]==playerSkinColors[0].g &&
+                   imageData.data[i+2]==playerSkinColors[0].b
+                ){
+                    // change to your new rgb
+                    imageData.data[i]=playerSkinColor.r;
+                    imageData.data[i+1]=playerSkinColor.r;
+                    imageData.data[i+2]=playerSkinColor.r;
+                }
+            }
+          // put the altered data back on the canvas
+          context.putImageData(imageData,0,0);
+
+
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background3.x, 0, backgroundSize.width, backgroundSize.height);
-
-
-          //drawPlayer
-          context.drawImage(currentPlayerImg, player.x, player.y, player.width, player.height);
 
           //drawGround
           context.fillStyle = "#4b2400";
