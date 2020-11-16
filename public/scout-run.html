@@ -834,6 +834,8 @@
           context.drawImage(currentPlayerImg, player.x, player.y, player.width, player.height);
 
           //set player skin playerSkinColor
+          /* disabled due to CORS problem
+
           // pull the entire image into an array of pixel data
           let imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
 
@@ -847,6 +849,7 @@
                    imageData.data[i+2]==playerSkinColors[0].b
                 ){
                     // change to your new rgb
+                    console.log('change color');
                     imageData.data[i]=gameVars.playerSkinColor.r;
                     imageData.data[i+1]=gameVars.playerSkinColor.r;
                     imageData.data[i+2]=gameVars.playerSkinColor.r;
@@ -854,8 +857,8 @@
             }
           // put the altered data back on the canvas
           context.putImageData(imageData,0,0);
-
-
+          */
+          
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
