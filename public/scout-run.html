@@ -242,7 +242,7 @@
           height: 2
         },
         slideObstacle: {
-          width: 1,
+          width: 0.5,
           height: 36
         },
         groundHeight: 2,
@@ -764,23 +764,18 @@
             //check collision with obstacles
             let objectCollisionOverlap = objectCollisionOverlapInUnits * getUnit();
             gameVars.obstacles.forEach(function(obstacle, index){
-              // jumpObstacles
-              if(obstacle.obstacleType == 'jump'){
-                // check x overlap
-                if((obstacle.x + obstacle.width) - player.x > objectCollisionOverlap && (player.x + player.width) - obstacle.x > objectCollisionOverlap){
-                  //check y overlap
-                  if((obstacle.y + obstacle.height) - player.y > objectCollisionOverlap  && (player.y + player.height) - obstacle.y > objectCollisionOverlap){
-                    gameVars.gameOver = true;
-                  }
+              // check x overlap
+              if((obstacle.x + obstacle.width) - player.x > objectCollisionOverlap && (player.x + player.width) - obstacle.x > objectCollisionOverlap){
+                //check y overlap
+                if((obstacle.y + obstacle.height) - player.y > objectCollisionOverlap  && (player.y + player.height) - obstacle.y > objectCollisionOverlap){
+                  gameVars.gameOver = true;
                 }
               }
-              else if(obstacle.obstacleType == 'slide'){
-                // check x overlap
-                if((obstacle.x + obstacle.width) - player.x > objectCollisionOverlap && (player.x + player.width) - obstacle.x > objectCollisionOverlap){
-                  //check player not overlapping with slideObstacle top
-                  if(obstacle.y - player.y > objectCollisionOverlap && (player.y + player.height) - obstacle.y > objectCollisionOverlap){
-                    gameVars.gameOver = true;
-                  }
+              // check x overlap
+              if((obstacle.x + obstacle.width) - player.x > objectCollisionOverlap && (player.x + player.width) - obstacle.x > objectCollisionOverlap){
+                //check player not overlapping with slideObstacle top
+                if(obstacle.y - player.y > objectCollisionOverlap && (player.y + player.height) - obstacle.y > objectCollisionOverlap){
+                  gameVars.gameOver = true;
                 }
               }
             });
