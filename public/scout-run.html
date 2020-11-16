@@ -157,7 +157,7 @@
 
     <img id="player-jump" src="https://scoutrun.codio.dev/images/player-jump-1.png">
 
-    <img id="player-slide" src="https://scoutrun.codio.dev/images/player-slide-1.png">
+    <img id="player-slide" src="https://scoutrun.codio.dev/images/player-slide-2.png">
 
     <div id="pre-game-background">
       <div id="pre-game-con">
@@ -188,7 +188,6 @@
       console.log('scout run start');
 
 
-
       /*
 
       GAME PROPERTIES
@@ -199,9 +198,9 @@
 
       const scrollSpeedIncreasePerLevelUnitsPerSecond = 2;
 
-      const jumpSpeedUnitsPerSecond = 23;
+      const jumpSpeedUnitsPerSecond = 27;
 
-      const gravitationalAccelerationUnitsPerSecondPerSecond = 45;
+      const gravitationalAccelerationUnitsPerSecondPerSecond = 57;
 
       // milliseconds
       const strideTimePeriod = 140;
@@ -229,6 +228,27 @@
       const keyboardDeviceInstructions = "<li>Press Up Arrow to Jump</li><li>Press Down Arrow to Slide</li>";
       const touchDeviceInstructions = "<li>Swipe Up to Jump</li><li>Swipe Down to Slide</li>";
 
+
+
+      /*
+
+      Change instructions and variables depending on device
+
+      */
+      const isTouchDevice = function() {
+        try {
+          document.createEvent("TouchEvent");
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if(isTouchDevice()){
+        document.getElementById('instructions').innerHTML = touchDeviceInstructions;
+      }
+
+
       //This object defines the size of the images relative to each other.
       const gameSizes = {
         playerRun: {
@@ -254,7 +274,7 @@
         groundHeight: 2,
         gameHeight: 20,
         getBackgroundHeight: function(){ return this.gameHeight - this.groundHeight },
-        playerHorizontalPosition: 0.25
+        playerHorizontalPosition: (isTouchDevice())? 0.1 : 0.25
       }
 
       const stepSequence = [1,2,3,2];
@@ -306,24 +326,6 @@
       */
 
       const runDomOperations = function(){
-
-        /*
-
-        Change instructions depending on device
-
-        */
-        const isTouchDevice = function() {
-          try {
-            document.createEvent("TouchEvent");
-            return true;
-          } catch (e) {
-            return false;
-          }
-        }
-
-        if(isTouchDevice()){
-          document.getElementById('instructions').innerHTML = touchDeviceInstructions;
-        }
 
         /*
 
@@ -830,9 +832,6 @@
 
         const redraw = function(){
 
-          //drawPlayer
-          context.drawImage(currentPlayerImg, player.x, player.y, player.width, player.height);
-
           //set player skin playerSkinColor
           /* disabled due to CORS problem
 
@@ -858,7 +857,7 @@
           // put the altered data back on the canvas
           context.putImageData(imageData,0,0);
           */
-          
+
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
@@ -869,6 +868,9 @@
           context.fillRect(0, gameSizes.getBackgroundHeight()*getUnit(), context.canvas.width, gameSizes.groundHeight*getUnit()); // x, y, width, height
           context.fillStyle = "#085500";
           context.fillRect(0, gameSizes.getBackgroundHeight()*getUnit(), context.canvas.width, gameSizes.groundHeight*getUnit()/5); // x, y, width, height
+
+          //drawPlayer
+          context.drawImage(currentPlayerImg, player.x, player.y, player.width, player.height);
 
           //draw obstacles
           gameVars.obstacles.forEach(function(obstacle, index){
