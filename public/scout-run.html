@@ -162,7 +162,7 @@
     <div id="pre-game-background">
       <div id="pre-game-con">
         <h1>Scout Run</h1>
-        <p class="blurb">As you run through the campsite, jump over the camp fires and slide through the tents to stay alive</p>
+        <p class="blurb">As you run through the campsite, jump over the camp fires and slide under the ropes to stay alive</p>
         <h3 class="controls">Controls:</h3>
         <ul id="instructions">
           <li>Press Up Arrow to Jump</li>
@@ -201,7 +201,7 @@
 
       const jumpSpeedUnitsPerSecond = 25;
 
-      const gravitationalAccelerationUnitsPerSecond = 1.5;
+      const gravitationalAccelerationUnitsPerSecondPerSecond = 45;
 
       // milliseconds
       const strideTimePeriod = 140;
@@ -242,8 +242,8 @@
           height: 2
         },
         slideObstacle: {
-          width: 5,
-          height: 3
+          width: 1,
+          height: 36
         },
         groundHeight: 2,
         gameHeight: 20,
@@ -278,7 +278,7 @@
       }
 
       const getGravitationalAcceleration = function(){
-        return gravitationalAccelerationUnitsPerSecond * getUnit() / 1000;
+        return gravitationalAccelerationUnitsPerSecondPerSecond * getUnit() / (1000*1000);
       }
 
       const getMinimumGapBetweenObstacles = function(){
@@ -369,13 +369,15 @@
         }
 
         const background1 = {
-          x: 0,
-          primary: true
+          x: 0
         }
 
         const background2 = {
-          x: 0,
-          primary: false
+          x: 0
+        }
+
+        const background3 = {
+          x: 0
         }
 
         const controller = {
@@ -461,7 +463,7 @@
         function SlideObstacle(){
           this.obstacleType = 'slide';
           this.x = context.canvas.width,
-          this.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.slideObstacle.height) * getUnit(),
+          this.y = (gameSizes.gameHeight - gameSizes.groundHeight - 2 - gameSizes.slideObstacle.height) * getUnit(),
           this.width = gameSizes.slideObstacle.width * getUnit(),
           this.height = gameSizes.slideObstacle.height * getUnit()
         }
@@ -474,6 +476,7 @@
         function GameVars(){
           this.startTime = 0;
           this.runTime = 0;
+          this.pauseTime = 0;
           this.runDistance = 0;
           this.frameCount = 0;
           this.lastFrameRunTime = 0;
@@ -526,14 +529,33 @@
           }
         }
 
+        const resizeObstacles = function(){
+          gameVars.obstacles.forEach(function(obstacle, item){
+            if(obstacle.obstacleType = 'jump'){
+              obstacle.x = context.canvas.width;
+              obstacle.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.jumpObstacle.height) * getUnit();
+              obstacle.width = gameSizes.jumpObstacle.width * getUnit();
+              obstacle.height = gameSizes.jumpObstacle.height * getUnit();
+            }
+            else if(obstacle.obstacleType = 'slide'){
+              obstacle.x = context.canvas.width;
+              obstacle.y = (gameSizes.gameHeight - gameSizes.groundHeight - gameSizes.slideObstacle.height) * getUnit();
+              obstacle.width = gameSizes.slideObstacle.width * getUnit();
+              obstacle.height = gameSizes.slideObstacle.height * getUnit();
+            }
+          });
+        }
+
         var windowResized = false;
         window.onresize = function(){
           windowResized = true;
         }
+
         const resizeAll = function(){
           resizeCanvas();
           resizeBackground();
           resizePlayer();
+          resizeObstacles();
           windowResized = false;
         }
 
@@ -545,12 +567,26 @@
         PREPARE GAME STATE
 
         */
-
         const startGame = function(){
           document.getElementById('pre-game-background').style.display = 'none';
           document.getElementById('post-game-background').style.display = 'none';
           window.requestAnimationFrame(loop);
         }
+
+        const startOnEnterKeypress = function(event){
+          if(event.keyCode == 13){
+            startGame();
+          }
+          window.removeEventListener('keydown', startOnEnterKeypress);
+        }
+
+        const restartOnEnterKeypress = function(event){
+          if(event.keyCode == 13){
+            restartGame();
+          }
+          window.removeEventListener('keydown', restartOnEnterKeypress);
+        }
+
 
         const setGameReady = function(){
           currentPlayerImg = playerRun1Img;
@@ -560,6 +596,7 @@
           document.getElementById('start-game').style.display = 'block';
           document.getElementById('start-game').addEventListener('click', startGame);
           document.getElementById('play-again').addEventListener('click', restartGame);
+          window.addEventListener('keydown', startOnEnterKeypress);
         }
 
         const checkImagesLoadedCount = function(index){
@@ -589,6 +626,7 @@
 
         */
         const executeGameOver = function(){
+          document.addEventListener('keydown', restartOnEnterKeypress);
           document.getElementById('post-game-background').style.display = 'block';
           document.getElementById('score').innerHTML = gameVars.score.value;
         }
@@ -612,9 +650,18 @@
 
         const loop = function(timeStamp) {
           if(gameVars.runTime == 0){
-            gameVars.startTime = timeStamp - 1;
+            gameVars.startTime = timeStamp-1;
+            gameVars.runTime = 1;
           }
-          gameVars.runTime = timeStamp - gameVars.startTime;
+          // if long pause since last frame
+          if(timeStamp - gameVars.startTime - gameVars.pauseTime - gameVars.runTime > 1000){
+            gameVars.pauseTime += timeStamp - gameVars.startTime - gameVars.pauseTime - gameVars.runTime - 1;
+
+          }
+          else  {
+            gameVars.runTime = timeStamp - gameVars.pauseTime - gameVars.startTime;
+          }
+
           if(Math.floor(gameVars.runTime/(1000/fps)) > gameVars.frameCount){
             gameVars.frameCount++;
 
@@ -635,9 +682,8 @@
 
             //apply gravity and move with y current velocity
             if(player.jumping){
-              player.yVelocity += getGravitationalAcceleration();
-
-              player.y += (gameVars.runTime - gameVars.lastFrameRunTime) * player.yVelocity;
+            player.y += (gameVars.runTime - gameVars.lastFrameRunTime) * player.yVelocity;
+            player.yVelocity += getGravitationalAcceleration() * (gameVars.runTime - gameVars.lastFrameRunTime);
             }
 
             //stop player falling through the floor
@@ -692,6 +738,7 @@
             let primaryBackgroundNumber = Math.floor(gameVars.runDistance / backgroundSize.width);
             background1.x = -gameVars.runDistance + backgroundSize.width * primaryBackgroundNumber;
             background2.x = background1.x + backgroundSize.width;
+            background3.x = background1.x + 2 * backgroundSize.width;
 
             //place obstacles
             if(gameVars.runTime > initialDelayBeforeObstacles){
@@ -783,6 +830,7 @@
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
+          context.drawImage(backgroundImg, background3.x, 0, backgroundSize.width, backgroundSize.height);
 
 
           //drawPlayer
