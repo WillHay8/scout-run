@@ -835,7 +835,7 @@
 
           //set player skin playerSkinColor
           // pull the entire image into an array of pixel data
-          var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+          let imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
 
           // examine every pixel,
           // change any old rgb to the new-rgb
@@ -847,9 +847,9 @@
                    imageData.data[i+2]==playerSkinColors[0].b
                 ){
                     // change to your new rgb
-                    imageData.data[i]=playerSkinColor.r;
-                    imageData.data[i+1]=playerSkinColor.r;
-                    imageData.data[i+2]=playerSkinColor.r;
+                    imageData.data[i]=gameVars.playerSkinColor.r;
+                    imageData.data[i+1]=gameVars.playerSkinColor.r;
+                    imageData.data[i+2]=gameVars.playerSkinColor.r;
                 }
             }
           // put the altered data back on the canvas
