@@ -832,32 +832,6 @@
 
         const redraw = function(){
 
-          //set player skin playerSkinColor
-          /* disabled due to CORS problem
-
-          // pull the entire image into an array of pixel data
-          let imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-
-          // examine every pixel,
-          // change any old rgb to the new-rgb
-          for (var i=0;i<imageData.data.length;i+=4)
-            {
-                // is this pixel the old rgb?
-                if(imageData.data[i]==playerSkinColors[0].r &&
-                   imageData.data[i+1]==playerSkinColors[0].g &&
-                   imageData.data[i+2]==playerSkinColors[0].b
-                ){
-                    // change to your new rgb
-                    console.log('change color');
-                    imageData.data[i]=gameVars.playerSkinColor.r;
-                    imageData.data[i+1]=gameVars.playerSkinColor.r;
-                    imageData.data[i+2]=gameVars.playerSkinColor.r;
-                }
-            }
-          // put the altered data back on the canvas
-          context.putImageData(imageData,0,0);
-          */
-
           //drawBackground
           context.drawImage(backgroundImg, background1.x, 0, backgroundSize.width, backgroundSize.height);
           context.drawImage(backgroundImg, background2.x, 0, backgroundSize.width, backgroundSize.height);
