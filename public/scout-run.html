@@ -190,45 +190,44 @@
 
       /*
 
-      GAME PROPERTIES
+      GAME CONSTANTS
 
       */
 
-      const initialScrollSpeedUnitsPerSecond = 10;
+      const GAMECONSTANTS = {
 
-      const scrollSpeedIncreasePerLevelUnitsPerSecond = 2;
+        fps: 30,
 
-      const jumpSpeedUnitsPerSecond = 27;
+        initialScrollSpeedUnitsPerSecond: 10,
 
-      const gravitationalAccelerationUnitsPerSecondPerSecond = 57;
+        jumpSpeedUnitsPerSecond: 27,
 
-      // milliseconds
-      const strideTimePeriod = 140;
+        gravitationalAccelerationUnitsPerSecondPerSecond: 57,
 
-      const fps = 30;
+        strideTimePeriod: 140, // milliseconds
 
-      const minimumGapBetweenObstaclesInUnits = 6;
+        stepSequence: [1,2,3,2],
 
-      const obstacleGenerationProbabilityPerSecond = 0.7;
+        minimumGapBetweenObstaclesInUnits: 6,
 
-      const objectCollisionOverlapInUnits = 0.5;
+        obstacleGenerationProbabilityPerSecond: 0.7,
 
-      const initialDelayBeforeObstacles = 2000; // milliseconds
+        objectCollisionOverlapInUnits: 0.5,
 
-      const levelTime = 15000; //milliseconds
+        initialDelayBeforeObstacles: 2000, // milliseconds
 
-      const levelUpTime = 1500; // milliseconds
+        keyboardDeviceInstructions: "<li>Press Up Arrow to Jump</li><li>Press Down Arrow to Slide</li>",
 
-      const playerSkinColors = [
-        {r: 255, g: 215, b: 183},
-        {r: 151, g: 96, b: 52},
-        {r: 76, g: 46, b: 21}
-      ];
+        touchDeviceInstructions: "<li>Swipe Up to Jump</li><li>Swipe Down to Slide</li>"
 
-      const keyboardDeviceInstructions = "<li>Press Up Arrow to Jump</li><li>Press Down Arrow to Slide</li>";
-      const touchDeviceInstructions = "<li>Swipe Up to Jump</li><li>Swipe Down to Slide</li>";
+/*
+        scrollSpeedIncreasePerLevelUnitsPerSecond: 2,
 
+        levelTime: 15000,
 
+        levelUpTime: 1500, // milliseconds
+*/
+      }
 
       /*
 
@@ -245,7 +244,7 @@
       }
 
       if(isTouchDevice()){
-        document.getElementById('instructions').innerHTML = touchDeviceInstructions;
+        document.getElementById('instructions').innerHTML = GAMECONSTANTS.touchDeviceInstructions;
       }
 
 
@@ -277,8 +276,6 @@
         playerHorizontalPosition: (isTouchDevice())? 0.1 : 0.25
       }
 
-      const stepSequence = [1,2,3,2];
-
 
 
 
@@ -286,7 +283,7 @@
 
       /*
 
-      GAME PROPERTY GETTERS
+      GAME CONSTANT GETTERS
 
       */
 
@@ -300,19 +297,19 @@
       }
 
       const getJumpVelocity = function(){
-        return -1 * jumpSpeedUnitsPerSecond * getUnit() / 1000;
+        return -1 * GAMECONSTANTS.jumpSpeedUnitsPerSecond * getUnit() / 1000;
       }
 
       const getGravitationalAcceleration = function(){
-        return gravitationalAccelerationUnitsPerSecondPerSecond * getUnit() / (1000*1000);
+        return GAMECONSTANTS.gravitationalAccelerationUnitsPerSecondPerSecond * getUnit() / (1000*1000);
       }
 
       const getMinimumGapBetweenObstacles = function(){
-        return minimumGapBetweenObstaclesInUnits * getUnit();
+        return GAMECONSTANTS.minimumGapBetweenObstaclesInUnits * getUnit();
       }
 
       const getObstacleGenerationProbability = function(){
-        return obstacleGenerationProbabilityPerSecond / 1000;
+        return GAMECONSTANTS.obstacleGenerationProbabilityPerSecond / 1000;
       }
 
 
@@ -489,7 +486,7 @@
           this.frameCount = 0;
           this.lastFrameRunTime = 0;
           this.lastFrameRunDistance = 0;
-          this.currentScrollSpeedUnitsPerSecond = initialScrollSpeedUnitsPerSecond;
+          this.currentScrollSpeedUnitsPerSecond = GAMECONSTANTS.initialScrollSpeedUnitsPerSecond;
           this.currentLevel = 1;
           this.levelUp = false;
           this.lastLevelUpTime = 0;
@@ -499,8 +496,7 @@
             x: 0,
             y: 40
           },
-          this.obstacles = [],
-          this.playerSkinColor = playerSkinColors[Math.floor(Math.random()*3)];
+          this.obstacles = []
         }
 
         /*
@@ -671,7 +667,7 @@
             gameVars.runTime = timeStamp - gameVars.pauseTime - gameVars.startTime;
           }
 
-          if(Math.floor(gameVars.runTime/(1000/fps)) > gameVars.frameCount){
+          if(Math.floor(gameVars.runTime/(1000/GAMECONSTANTS.fps)) > gameVars.frameCount){
             gameVars.frameCount++;
 
             if(windowResized){
@@ -729,7 +725,7 @@
 
             //runNextPosition
             if(!player.sliding && !player.jumping){
-              runPosition = stepSequence[Math.floor(gameVars.runTime/strideTimePeriod%stepSequence.length)];
+              runPosition = GAMECONSTANTS.stepSequence[Math.floor(gameVars.runTime/GAMECONSTANTS.strideTimePeriod%GAMECONSTANTS.stepSequence.length)];
               switch (runPosition){
                 case 1:
                   currentPlayerImg = playerRun1Img;
@@ -750,7 +746,7 @@
             background3.x = background1.x + 2 * backgroundSize.width;
 
             //place obstacles
-            if(gameVars.runTime > initialDelayBeforeObstacles){
+            if(gameVars.runTime > GAMECONSTANTS.initialDelayBeforeObstacles){
               if(gameVars.obstacles.length == 0 || gameVars.obstacles[gameVars.obstacles.length - 1].x + gameVars.obstacles[gameVars.obstacles.length - 1].width + getMinimumGapBetweenObstacles() < context.canvas.width){
                 if(Math.random() < (gameVars.runTime - gameVars.lastFrameRunTime) * getObstacleGenerationProbability()){
                   if(Math.random() > 0.5){
@@ -771,7 +767,7 @@
 
 
             //check collision with obstacles
-            let objectCollisionOverlap = objectCollisionOverlapInUnits * getUnit();
+            let objectCollisionOverlap = GAMECONSTANTS.objectCollisionOverlapInUnits * getUnit();
             gameVars.obstacles.forEach(function(obstacle, index){
               // check x overlap
               if((obstacle.x + obstacle.width) - player.x > objectCollisionOverlap && (player.x + player.width) - obstacle.x > objectCollisionOverlap){
@@ -795,14 +791,14 @@
 
 /*
             //level up if time has passed
-            if(gameVars.runTime / levelTime > gameVars.currentLevel){
+            if(gameVars.runTime / GAMECONSTANTS.levelTime > gameVars.currentLevel){
               gameVars.levelUp = true;
               gameVars.currentLevel++;
               console.log('level: '+gameVars.currentLevel);
-              gameVars.currentScrollSpeedUnitsPerSecond += scrollSpeedIncreasePerLevelUnitsPerSecond;
+              gameVars.currentScrollSpeedUnitsPerSecond += GAMECONSTANTS.scrollSpeedIncreasePerLevelUnitsPerSecond;
               gameVars.lastLevelUpTime = gameVars.runTime;
             }
-            if(gameVars.levelUp == true && gameVars.runTime > gameVars.lastLevelUpTime + levelUpTime){
+            if(gameVars.levelUp == true && gameVars.runTime > gameVars.lastLevelUpTime + GAMECONSTANTS.levelUpTime){
               gameVars.levelUp = false;
             }
 */
